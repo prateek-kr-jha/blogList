@@ -123,13 +123,33 @@ describe('total likes', () => {
 //     })
 // })
 
-describe('test unique idetifier is id', () => {
+describe('unique idetifier is id', () => {
     test('check for presence of id', async() => {
         const blogs = await api.get('/api/blogs');
         const id_absent = blogs.body.every(blog => blog.id);
         assert(id_absent)
     })
 })
+
+describe('adding a new blog', () => {
+    test('a valid blog is added', async () => {
+        const newBlog = {
+            "title": "Test3",
+            "author": "Test3",
+            "url": "Test3",
+            "likes": 3
+        }
+
+        await api.post('/api/blogs')
+        .send(newBlog).expect(201)
+        .expect('Content-Type', /application\/json/);  
+
+        const blogs = await helper.blogsInDb();
+        assert.strictEqual(blogs.length, helper.initialBlogs.length + 1);
+    })
+})
+
+
 
 after(async () => {
     await mongoose.connection.close();

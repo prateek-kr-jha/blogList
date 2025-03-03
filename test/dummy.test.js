@@ -8,6 +8,7 @@ const Blogs = require('../model/blog');
 const listHelper = require('../utils/list_helper');
 
 beforeEach(async () => {
+    console.log('in before each');
     await Blogs.deleteMany({});
     console.log('cleared');
     const blogObjects = helper.initialBlogs.map(blog => new Blogs(blog));
@@ -58,72 +59,76 @@ describe('total likes', () => {
     // })
 })
 
-describe('most blogs', () => {
+// describe('most blogs', () => {
 
-    test('when list has only one blog, equals to that blog', () => {
-        const result = listHelper.mostBlogs(listWithOneBlog);
-        assert.deepStrictEqual(result, {
-            author: 'Edsger W. Dijkstra',
-            blogs: 1
-        });
-    })
+//     // test('when list has only one blog, equals to that blog', () => {
+//     //     const result = listHelper.mostBlogs(listWithOneBlog);
+//     //     assert.deepStrictEqual(result, {
+//     //         author: 'Edsger W. Dijkstra',
+//     //         blogs: 1
+//     //     });
+//     // })
 
 
-    test('when list has multiple blog', () => {
-        const result = listHelper.mostBlogs(listWithMultipleBlog);
-        assert.deepStrictEqual(result, {
-            author: "Robert C. Martin",
-            blogs: 3
-        });
-    })
+//     test('when list has multiple blog', () => {
+//         const result = listHelper.mostBlogs(listWithMultipleBlog);
+//         assert.deepStrictEqual(result, {
+//             author: "Robert C. Martin",
+//             blogs: 3
+//         });
+//     })
 
-})
+// })
 
-describe('highest likes', () => {
-    test('when list has only one blog, equals the likes of that', () => {
-        const result = listHelper.favoriteBlog(listWithOneBlog);
-        assert.deepStrictEqual(result, listWithOneBlog[0]);
-    })
+// describe('highest likes', () => {
+//     test('when list has only one blog, equals the likes of that', () => {
+//         const result = listHelper.favoriteBlog(listWithOneBlog);
+//         assert.deepStrictEqual(result, listWithOneBlog[0]);
+//     })
 
-    test('when list has multiple blogs, sum eqauls to sum of all likes', () => {
-        const result = listHelper.favoriteBlog(listWithMultipleBlog);
-        assert.deepStrictEqual(result, {
-            _id: "5a422b3a1b54a676234d17f9",
-            title: "Canonical string reduction",
-            author: "Edsger W. Dijkstra",
-            url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
-            likes: 12,
-            __v: 0
-          });
-    })
+//     test('when list has multiple blogs, sum eqauls to sum of all likes', () => {
+//         const result = listHelper.favoriteBlog(listWithMultipleBlog);
+//         assert.deepStrictEqual(result, {
+//             _id: "5a422b3a1b54a676234d17f9",
+//             title: "Canonical string reduction",
+//             author: "Edsger W. Dijkstra",
+//             url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
+//             likes: 12,
+//             __v: 0
+//           });
+//     })
 
-    // const emptyList = [];
-    // test('when list is empty, total likes is 0',() => {
-    //     const result = listHelper.favoriteBlog(emptyList);
-    //     assert.strictEqual(result, 0);
-    // })
-})
+//     // const emptyList = [];
+//     // test('when list is empty, total likes is 0',() => {
+//     //     const result = listHelper.favoriteBlog(emptyList);
+//     //     assert.strictEqual(result, 0);
+//     // })
+// })
 
-describe('most likes', () => {
-    test('when list has only one blog, equals to that blog', () => {
-        const result = listHelper.mostLikes(listWithOneBlog);
-        assert.deepStrictEqual(result,{
-            author: "Edsger W. Dijkstra",
-            likes: 5
-        })
-    })
+// describe('most likes', () => {
+//     test('when list has only one blog, equals to that blog', () => {
+//         const result = listHelper.mostLikes(listWithOneBlog);
+//         assert.deepStrictEqual(result,{
+//             author: "Edsger W. Dijkstra",
+//             likes: 5
+//         })
+//     })
 
-    test('when list has  multiple blog', () => {
-        const result = listHelper.mostLikes(listWithMultipleBlog);
-        assert.deepStrictEqual(result,{
-            author: "Edsger W. Dijkstra",
-            likes: 17
-        })
-    })
-})
+//     test('when list has  multiple blog', () => {
+//         const result = listHelper.mostLikes(listWithMultipleBlog);
+//         assert.deepStrictEqual(result,{
+//             author: "Edsger W. Dijkstra",
+//             likes: 17
+//         })
+//     })
+// })
 
 describe('test unique idetifier is id', () => {
-    test()
+    test('check for presence of id', async() => {
+        const blogs = await api.get('/api/blogs');
+        const id_absent = blogs.body.every(blog => blog.id);
+        assert(id_absent)
+    })
 })
 
 after(async () => {

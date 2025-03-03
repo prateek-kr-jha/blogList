@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 const config = require('../utils/config');
 
-const mongoUrl = process.env.MODE_ENV=="test" ? config.TEST_MONGODB_URI : config.MONGODB_URI;
+const mongoUrl = process.env.NODE_ENV === "test" ? config.TEST_MONGODB_URI : config.MONGODB_URI;
+console.log(mongoUrl, process.env.NODE_ENV);
 const blogSchema = new mongoose.Schema({
   title: String,
   author: String,

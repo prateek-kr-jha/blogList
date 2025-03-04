@@ -8,6 +8,9 @@ blogRouter.get('/', async (request, response, next) => {
 })
 
 blogRouter.post('/', async (request, response, next) => {
+  if(!request.body.title || !request.body.url) {
+    return response.status(400).json({error: 'title or url missing'}).end();
+  }
   const newBlog = {
     title: request.body.title,
     author: request.body.author,

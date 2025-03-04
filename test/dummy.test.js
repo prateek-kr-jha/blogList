@@ -147,19 +147,31 @@ describe('adding a new blog', () => {
         const blogs = await helper.blogsInDb();
         assert.strictEqual(blogs.length, helper.initialBlogs.length + 1);
     })
-})
 
-describe('check for default likes', () => {
     test('default likes is 0', async () => {
         const newBlog = {
-            "title": "Test3",
-            "author": "Test3",
-            "url": "Test3"
+            "title": "Test4",
+            "author": "Test4",
+            "url": "Test4"
         }
 
         const response = await api.post('/api/blogs').send(newBlog).expect(201);
         assert.strictEqual(response.body.likes, 0);
     })
+
+    test('missing url and/or title', async () => {
+        const newBlog = {
+            "title": "",
+            "author": "Test3",
+            "url": ""
+        }
+
+        const response = await api.post('/api/blogs').send(newBlog).expect(400);
+    })
+})
+
+describe('check for default likes', () => {
+
 })
 
 

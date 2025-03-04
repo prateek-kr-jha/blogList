@@ -149,6 +149,19 @@ describe('adding a new blog', () => {
     })
 })
 
+describe('check for default likes', () => {
+    test('default likes is 0', async () => {
+        const newBlog = {
+            "title": "Test3",
+            "author": "Test3",
+            "url": "Test3"
+        }
+
+        const response = await api.post('/api/blogs').send(newBlog).expect(201);
+        assert.strictEqual(response.body.likes, 0);
+    })
+})
+
 
 
 after(async () => {

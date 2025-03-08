@@ -4,7 +4,8 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-  "title": "Test7",
-  "author": "Test7",
-  "url": "Test7"
+  "title": "Test8",
+  "author": "Test8",
+  "url": "Test8",
+  "user": "67ccb9766dd8771b7022a241"
 }

@@ -10,18 +10,18 @@ const userSchema = new mongoose.Schema({
     name: String,
     passwordHash: {
         type: String,
-        require: true
+        required: true
     }
 })
 
-userSchema.set('toJSON', {
-    transform: (document, returnObject) => {
-        returnObject.id = returnObject._id.toString();
-        delete returnObject._id;
-        delete returnObject.__v;
-        delete returnObject.passwordHash;
-    }
-})
+// userSchema.set('toJSON', {
+//     transform: (document, returnObject) => {
+//         returnObject.id = returnObject._id.toString();
+//         delete returnObject._id;
+//         delete returnObject.__v;
+//         delete returnObject.passwordHash;
+//     }
+// })
 
 
 const User = mongoose.model('User', userSchema);

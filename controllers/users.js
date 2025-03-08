@@ -4,6 +4,7 @@ const userRouter = require('express').Router();
 
 userRouter.get('/', async (req, res) => {
     const users = await User.find({});
+    // await User.deleteMany();
 
     return res.json(users);
 })
@@ -19,18 +20,18 @@ userRouter.post('/', async (req, res) => {
     }
 
     const user = await User.find({ username });
-
-    if(user) {
+    console.log(user, "-----------------")
+    if(user && user.length > 0) {
         return res.status(409).json({ error: 'username already taken'})
     }
 
     const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(body.password, saltRounds);
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     const newUser = new User({
         username,
         name,
-        password
+        hashedPassword
     })
 
     const returnedUser = await newUser.save();

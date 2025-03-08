@@ -9,7 +9,7 @@ app.use(cors())
 app.use(express.json())
 
 app.use('/api/blogs', blogRouter);
-app.use('/api/blogs', userRouter);
+app.use('/api/users', userRouter);
 
 app.use(middleware.errorHandler);
 app.use(middleware.unknownEndpoint);

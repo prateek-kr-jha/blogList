@@ -1,12 +1,20 @@
-const monggose = require('mongoose');
+const { type } = require('express/lib/response');
+const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-    username: String,
+    username: {
+        type: String,
+        required: true,
+        unique: true
+    },
     name: String,
-    passwordHash: String
+    passwordHash: {
+        type: String,
+        require: true
+    }
 })
 
-userSchema.set('toJSON', () => {
+userSchema.set('toJSON', {
     transform: (document, returnObject) => {
         returnObject.id = returnObject._id.toString();
         delete returnObject._id;
@@ -16,6 +24,6 @@ userSchema.set('toJSON', () => {
 })
 
 
-const User = moongoose.model('User', userSchema);
+const User = mongoose.model('User', userSchema);
 
 module.exports = User;

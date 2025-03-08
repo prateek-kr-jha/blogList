@@ -9,17 +9,28 @@ userRouter.get('/', async (req, res) => {
 })
 
 userRouter.post('/', async (req, res) => {
-    const body = req.body;
+    const {username, password, name } = req.body;
 
-    if(!body.username || !body.password) {
+    if(!username || !password) {
         return res.status(400).json({error: 'username or password missing'});
     }
-    if(body.password.length < 3) {
+    if(password.length < 3) {
         return res.status(400).json({error: 'password length must be at least 3'});
     }
 
+    const user = await User.find({ username });
+
+    if(user) {
+        return res.status(409).json({ error: 'username already taken'})
+    }
+
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(body.password, saltRounds);
+
     const newUser = new User({
-        ...body
+        username,
+        name,
+        password
     })
 
     const returnedUser = await newUser.save();
@@ -27,3 +38,5 @@ userRouter.post('/', async (req, res) => {
     res.status(201).json(returnedUser);
 
 })
+
+module.exports = userRouter;

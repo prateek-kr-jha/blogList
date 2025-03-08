@@ -170,8 +170,30 @@ describe('adding a new blog', () => {
     })
 })
 
-describe('check for default likes', () => {
+describe('delete blog using id', async () => {
+    const blogs = await helper.blogsInDb();
+    const blogToDelete = blogs[0];
+    test('delete a blog', async () => {
+        await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+        const checkForBlog = await api.get(`/api/blogs/${blogToDelete.id}`).expect(404);
+        const blogsAfterDelete = await helper.blogsInDb();
+        assert.strictEqual(blogsAfterDelete.length, helper.initialBlogs.length - 1);
+    })
+})
 
+
+describe('update likes using id', async () => {
+    const blogs = await helper.blogsInDb();
+    const blogToUpdateBlog = blogs[1];
+
+    test('update likes', async() => {
+        const updatedBlog = {
+            likes: 10
+        }
+
+        const response = await api.put(`/api/blogs/${blogToUpdateBlog.id}`).send(updatedBlog).expect(200);
+        assert.strictEqual(response.body.likes, 10);
+    })
 })
 
 

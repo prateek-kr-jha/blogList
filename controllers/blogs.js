@@ -1,6 +1,6 @@
 const blogRouter = require('express').Router();
 const Blog = require('../model/blog');
-const blog_helper = require('../test/blog_helper');
+const User = require('../model/user');
 
 
 blogRouter.get('/', async (request, response, next) => {
@@ -19,9 +19,15 @@ blogRouter.post('/', async (request, response, next) => {
     likes: request.body.likes ? request.body.likes : 0,
     user: request.body.user_id ? request.body.user_id : 0
   }
+  const user = await User.findById(request.body.user_id);
+  if(!user) {
+    return resp.status(401).json({ error: 'no such user' });
+  }
   const blog = new Blog(newBlog);
 
   const returnedBlog = await blog.save();
+  user.blogs = user.blogs.concat(returnedBlog.id);
+  await user.save();
   return response.status(201).json(returnedBlog);
 })
 

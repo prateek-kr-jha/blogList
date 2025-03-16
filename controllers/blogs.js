@@ -63,11 +63,17 @@ blogRouter.delete('/:id', async (req, res, next) => {
       return res.status(401).json({ error: 'token invalid' });
     }
     const user = await User.findById(decodeToken.id);
-    console.log(user)
-    await Blog.findOneAndDelete({
+    
+    const deletedBlog = await Blog.findOneAndDelete({
       _id: req.params.id, 
       user: user._id
     });
+
+    if(!deletedBlog) {
+      return res.status(401).json({ error: 'unauthorized User' });
+
+    }
+
     res.status(204).end();
   } catch(e) {
     next(e)

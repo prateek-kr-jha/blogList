@@ -21,34 +21,38 @@ blogRouter.get('/', async (request, response, next) => {
 })
 
 blogRouter.post('/', async (request, response, next) => {
-  if(!request.body.title || !request.body.url) {
-    return response.status(400).json({error: 'title or url missing'}).end();
+  try {
+    if(!request.body.title || !request.body.url) {
+      return response.status(400).json({error: 'title or url missing'}).end();
+    }
+    console.log(getTokenFrom(request))
+    const decodeToken = jwt.verify(getTokenFrom(request), config.SECRET);
+  
+    if(!decodeToken.id) {
+      return resp.status(401).json({ error: 'token invalid' });
+    }
+    const user = await User.findById(decodeToken.id);
+  
+    const newBlog = {
+      title: request.body.title,
+      author: request.body.author,
+      url: request.body.url,
+      likes: request.body.likes ? request.body.likes : 0,
+      user: user.id
+    }
+  
+    if(!user) {
+      return resp.status(401).json({ error: 'no such user' });
+    }
+    const blog = new Blog(newBlog);
+  
+    const returnedBlog = await blog.save();
+    user.blogs = user.blogs.concat(returnedBlog.id);
+    await user.save();
+    return response.status(201).json(returnedBlog);
+  } catch(e) {
+    next(e)
   }
-  console.log(getTokenFrom(request))
-  const decodeToken = jwt.verify(getTokenFrom(request), config.SECRET);
-
-  if(!decodeToken.id) {
-    return resp.status(401).json({ error: 'token invalid' });
-  }
-  const user = await User.findById(decodeToken.id);
-
-  const newBlog = {
-    title: request.body.title,
-    author: request.body.author,
-    url: request.body.url,
-    likes: request.body.likes ? request.body.likes : 0,
-    user: user.id
-  }
-
-  if(!user) {
-    return resp.status(401).json({ error: 'no such user' });
-  }
-  const blog = new Blog(newBlog);
-
-  const returnedBlog = await blog.save();
-  user.blogs = user.blogs.concat(returnedBlog.id);
-  await user.save();
-  return response.status(201).json(returnedBlog);
 })
 
 blogRouter.delete('/:id', async (req, res) => {

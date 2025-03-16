@@ -2,7 +2,7 @@ GET http://localhost:3003/api/blogs
 ###
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRyaXIiLCJpZCI6IjY3ZDA4NGRjMTVlOGExNDkzZGE2MjU2NiIsImlhdCI6MTc0MjEyODc4NX0.cjT6sA6QeM6hgwH41pQJVLCvUlY9H2h2ZuEI97BJFnk
+Authorization: Bearer eyJhbGciOiJIUzI1NiIcCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRyaXIiLCJpZCI6IjY3ZDA4NGRjMTVlOGExNDkzZGE2MjU2NiIsImlhdCI6MTc0MjEyODc4NX0.cjT6sA6QeM6hgwH41pQJVLCvUlY9H2h2ZuEI97BJFnk
 
 {
   "title": "Test7",

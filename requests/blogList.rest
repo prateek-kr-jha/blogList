@@ -2,10 +2,10 @@ GET http://localhost:3003/api/blogs
 ###
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRyaXIiLCJpZCI6IjY3ZDA4NGRjMTVlOGExNDkzZGE2MjU2NiIsImlhdCI6MTc0MjEyODc4NX0.cjT6sA6QeM6hgwH41pQJVLCvUlY9H2h2ZuEI97BJFnk
 
 {
-  "title": "Test6",
-  "author": "Test6",
-  "url": "Test6",
-  "user_id": "67d084dc15e8a1493da62566"
+  "title": "Test7",
+  "author": "Test7",
+  "url": "Test8"
 }

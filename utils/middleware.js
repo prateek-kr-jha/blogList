@@ -1,3 +1,13 @@
+const getTokenFrom = request => {
+    const authorization = request.get('authorization');
+    if(authorization && authorization.startsWith('Bearer ')) {
+        return authorization.replace('Bearer ', '');
+    }
+  
+    return null;
+}
+
+
 const errorHandler = (error, request, response, next) => {
     console.error(error.message)
 
@@ -16,7 +26,13 @@ const unknownEndpoint = (request, response) => {
     response.status(404).send({ error: 'unknown endpoint' });
 }
 
+const tokenExtractor = (req, res, next) => {
+    req.token = getTokenFrom(req);
+    next();
+}
+
 module.exports = {
     errorHandler,
-    unknownEndpoint
+    unknownEndpoint,
+    tokenExtractor
 }

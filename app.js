@@ -8,7 +8,7 @@ const loginRouter = require('./controllers/login');
 
 app.use(cors())
 app.use(express.json())
-
+app.use(middleware.tokenExtractor)
 app.use('/api/login', loginRouter);
 app.use('/api/blogs', blogRouter);
 app.use('/api/users', userRouter);

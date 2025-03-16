@@ -5,14 +5,14 @@ const jwt = require('jsonwebtoken');
 const config = require('./../utils/config');
 
 
-const getTokenFrom = request => {
-  const authorization = request.get('authorization');
-  if(authorization && authorization.startsWith('Bearer ')) {
-      return authorization.replace('Bearer ', '');
-  }
+// const getTokenFrom = request => {
+//   const authorization = request.get('authorization');
+//   if(authorization && authorization.startsWith('Bearer ')) {
+//       return authorization.replace('Bearer ', '');
+//   }
 
-  return null;
-}
+//   return null;
+// }
 
 
 blogRouter.get('/', async (request, response, next) => {
@@ -25,8 +25,8 @@ blogRouter.post('/', async (request, response, next) => {
     if(!request.body.title || !request.body.url) {
       return response.status(400).json({error: 'title or url missing'}).end();
     }
-    console.log(getTokenFrom(request))
-    const decodeToken = jwt.verify(getTokenFrom(request), config.SECRET);
+    console.log(request.token, "--------------------");
+    const decodeToken = jwt.verify(request.token, config.SECRET);
   
     if(!decodeToken.id) {
       return resp.status(401).json({ error: 'token invalid' });

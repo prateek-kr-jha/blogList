@@ -6,6 +6,22 @@ const mongoose = require('mongoose');
 const helper = require('./blog_helper');
 const Blogs = require('../model/blog');
 const listHelper = require('../utils/list_helper');
+const Users = require('../model/user');
+const bcrypt = require('bcrypt');
+
+const createUser = async () => {
+    const saltRounds = 10;
+    const password = "tringsThe";
+    const passwordHash = await bcrypt.hash(password, saltRounds);
+    console.log(passwordHash, "----------")
+    const newUser = new Users({
+        "username": "trir",
+        "name": "trng oet",
+        passwordHash
+    })
+
+    const returnedUser = await newUser.save();
+}
 
 beforeEach(async () => {
     console.log('in before each');
@@ -14,6 +30,10 @@ beforeEach(async () => {
     const blogObjects = helper.initialBlogs.map(blog => new Blogs(blog));
     const promiseArray = blogObjects.map(blog => blog.save());
     await Promise.all(promiseArray);
+    //user creation
+    await Users.deleteMany({});
+    await createUser()
+
 })
 
 const api = supertest(app);
@@ -133,18 +153,29 @@ describe('unique idetifier is id', () => {
 
 describe('adding a new blog', () => {
     test('a valid blog is added', async () => {
+        const loginDetails = {
+            username: "trir",
+            password: "tringsThe"
+        };
+        const loginResponse = await api.post('/api/login').send(loginDetails);
+        const userJwt = loginResponse.body.token;
         const newBlog = {
-            "title": "Test3",
-            "author": "Test3",
-            "url": "Test3",
+            "title": "rajesh3",
+            "author": "arjesh3",
+            "url": "khanna 3",
             "likes": 3
         }
 
+        const token = "Bearer " + userJwt
+
         await api.post('/api/blogs')
-        .send(newBlog).expect(201)
+        .send(newBlog)
+        .set({ Authorization : token})
+        .expect(201)
         .expect('Content-Type', /application\/json/);  
 
         const blogs = await helper.blogsInDb();
+        console.log(blogs, "--------------------")
         assert.strictEqual(blogs.length, helper.initialBlogs.length + 1);
     })
 

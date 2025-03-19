@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import blogs from './services/blogs'
 
 
 const App = () => {
@@ -24,7 +25,12 @@ const App = () => {
         username, password
       })
       if(user) {
+        console.log(user, "user-------------------------")
+        blogService.setToken(user.token);
         setUser(user);
+        const blog_response = await blogService.getAll();
+        console.log(blog_response, "=-------------------");
+        setBlogs(blog_response)
       }
       setPassword('');
       setUsername('');
@@ -60,14 +66,28 @@ const App = () => {
     )
   }
 
+  // const Blogs = async () => {
+  //   // const blogs = await blogService.getAll();
+  //   return (
+  //     <div>
+  //       <h2>blogs</h2>
+  
+  //       {blogs.map(blog =>
+  //         <Blog key={blog.id} blog={blog} />
+  //       )} 
+  //     </div>
+  //   )
+  // }
+
   return (
     <div>
-      {user === null ? LoginForm() : <h1>Logged in</h1>}
-      {/* <h2>blogs</h2>
+      {user === null && LoginForm()}
+      <h2>blogs</h2>
+  
+        {blogs.map(blog =>
+          <Blog key={blog.id} blog={blog} />
+        )} 
 
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
-      )} */}
     </div>
   )
 }

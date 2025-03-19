@@ -1,7 +1,14 @@
 import axios from 'axios'
-const baseUrl = '/api/blogs'
+const baseUrl = '/api/login'
 
 const login = async (credentials) => {
-    { username, password } = credentials;
-    const response = await ax
+    // const { username, password } = credentials;
+    console.log(credentials)
+    const response = await axios.post(baseUrl, credentials);
+    console.log(response.data);
+    return response.data;
+}
+
+export default {
+    login
 }

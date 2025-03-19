@@ -33,10 +33,22 @@ const App = () => {
     )  
   }, [])
 
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    console.log(username, password, "-----------------");
+    try {
+
+    } catch(e) {
+      console.log(e);
+    }
+  }
+
   const LoginForm = () => {
     return (
-      <form>
-        Log into application
+      <form onSubmit={handleLogin}>
+        <h1>
+          Log into application
+        </h1>
         <div>
           username
           <input
@@ -46,15 +58,23 @@ const App = () => {
           />
         </div>
         <div>
-  
+          password
+          <input
+            type = "password"
+            value = {password}
+            onChange = {({ target }) => setPassword(target.value)}
+          />
         </div>
+        <button type="submit">login</button>
       </form>
     )
   }
 
   return (
     <div>
+      {user === null && LoginForm()}
       <h2>blogs</h2>
+
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}

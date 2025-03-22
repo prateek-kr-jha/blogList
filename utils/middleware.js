@@ -48,7 +48,6 @@ const unknownEndpoint = (request, response) => {
 }
 
 const tokenExtractor = (req, res, next) => {
-    console.log(req, "----------------------")
     req.token = getTokenFrom(req);
     next();
 }

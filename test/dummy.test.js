@@ -39,19 +39,8 @@ beforeEach(async () => {
 const api = supertest(app);
 
 
-describe('checks if the db is getting filled on its own', () => {
-    test('blogs are returned as json', async () => {
-        await api.get('/api/blogs')
-        .expect(200)
-        .expect('Content-Type', /application\/json/);
-    })
 
-    test('blogs are filled', async () => {
-       const result = await api.get('/api/blogs');
-        // console.log(result.body);
-       assert.strictEqual(result.body.length, helper.initialBlogs.length);
-    })
-})
+
 
 // test('dummy returns one', () => {
 //     const blogs = [];

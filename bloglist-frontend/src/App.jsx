@@ -25,6 +25,9 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [message, setMessage] = useState(null)
   const [messageClass, setMessageClass] = useState(null)
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
 
   useEffect(() => {
     const loggedBlogAppUser = window.localStorage.getItem('loggedBlogAppUser');
@@ -102,10 +105,68 @@ const App = () => {
     )
   }
 
+  const handleBlogSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const blog = await blogService.create({
+        title,
+        author,
+        url
+      })
+      console.log(blog, "----------------------------------");
+      setBlogs(blogs.concat(blog))
+      setMessageClass("notification")
+      setMessage(`a new blog ${blog.title} by ${blog.author} added`);
+      setTimeout(() => {
+        setMessageClass(null)
+        setMessage(null)
+      }, 5000)
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+
+    } catch(e) {
+      console.log(e);
+      setMessageClass("error")
+      setMessage("")
+      setTimeout(() => {
+        setMessageClass(null)
+        setMessage(null)
+      }, 5000)
+    }
+  }
+
   const BlogForm = () => {
     return (
       <div>
-        <h2></h2>
+        <h2>Create New</h2>
+        <form onSubmit={handleBlogSubmit}>
+          <div>
+            title:
+            <input 
+              type="text"
+              value={title}
+              onChange={({ target }) => setTitle(target.value)}
+            />
+          </div>
+          <div>
+            author:
+            <input 
+              type="text"
+              value={author}
+              onChange={({ target }) => setAuthor(target.value)}
+            />
+          </div>
+          <div>
+            url:
+            <input 
+              type="url"
+              value={url}
+              onChange={({ target }) => setUrl(target.value)}
+            />
+          </div>
+          <button type="submit">Create</button>
+        </form>
       </div>
     )
   }
@@ -119,6 +180,8 @@ const App = () => {
       <Notification className={messageClass} message={message} />
       <h2>blogs</h2>
         <div>{user.name} logged in <button type="submit" onClick={handleLogout}>Logout</button></div>
+        <br />
+        {BlogForm()}
         <br/>
         {blogs.map(blog =>
           <Blog key={blog.id} blog={blog} />

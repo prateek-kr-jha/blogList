@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import LoginForm from './components/Login'
 
 const Notification = ({ message, className }) => {
   if(message === null) {
@@ -19,6 +20,7 @@ const Notification = ({ message, className }) => {
 
 
 const App = () => {
+  const [loginVisible, setLoginVisible] = useState(false)
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [username, setUsername] = useState('')
@@ -75,32 +77,25 @@ const App = () => {
     window.localStorage.removeItem('loggedBlogAppUser');
     setUser(null);
   }
-  const LoginForm = () => {
+  const loginForm = () => {
+    const hideWhenVisible = { display: loginVisible ? 'none': '' }
+    const showWhenVisible = { display: loginVisible ? '' : 'none' }
+
     return (
       <div>
-        <Notification className={messageClass} message={message} />
-        <form onSubmit={handleLogin}>
-          <h1>
-            Log into application
-          </h1>
-          <div>
-            username
-            <input
-              type = "text"
-              value = {username}
-              onChange = {({ target }) => setUsername(target.value)}
-            />
-          </div>
-          <div>
-            password
-            <input
-              type = "password"
-              value = {password}
-              onChange = {({ target }) => setPassword(target.value)}
-            />
-          </div>
-          <button type="submit">login</button>
-        </form>
+        <div style={hideWhenVisible}>
+          <button onClick={() => setLoginVisible(true)}>Log in</button>
+        </div>
+        <div style={showWhenVisible}>
+          <LoginForm 
+            username={username}
+            password={password}
+            handlePasswordChange={({ target }) => setPassword(target.value)}
+            handleUsernameChange={({ target }) => setUsername(target.value)}
+            handleSubmit={handleLogin}
+          />
+          <button onClick={() => setLoginVisible(false)}>Cancel</button>
+        </div>
       </div>
     )
   }
@@ -173,7 +168,12 @@ const App = () => {
 
 
   if(user === null) {
-    return LoginForm()
+    return (
+      <div>
+        <Notification className={messageClass} message={message} />
+        {loginForm()}
+      </div>
+    )
   }
   return (
     <div>

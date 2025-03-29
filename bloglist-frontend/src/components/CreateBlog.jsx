@@ -1,12 +1,23 @@
+import { useState } from 'react'
+
 const CreateBlog = ({
-    title, 
-    author,
-    url,
-    handleBlogSubmit,
-    handleTitleChange,
-    handleAuthorChange,
-    handleUrlChange
+    addBlog
 }) => {
+    const [title, setTitle] = useState('')
+    const [author, setAuthor] = useState('')
+    const [url, setUrl] = useState('')
+    const handleBlogSubmit = async (e) => {
+        e.preventDefault();
+        addBlog({
+            title,
+            author,
+            url
+        })
+
+        setTitle('')
+        setAuthor('')
+        setUrl('')
+    }
     return (
         <div>
           <h2>Create New</h2>
@@ -16,7 +27,7 @@ const CreateBlog = ({
               <input 
                 type="text"
                 value={title}
-                onChange={handleTitleChange}
+                onChange={({ target }) => setTitle(target.value)}
               />
             </div>
             <div>
@@ -24,7 +35,7 @@ const CreateBlog = ({
               <input 
                 type="text"
                 value={author}
-                onChange={handleAuthorChange}
+                onChange={({ target }) => setAuthor(target.value)}
               />
             </div>
             <div>
@@ -32,7 +43,7 @@ const CreateBlog = ({
               <input 
                 type="url"
                 value={url}
-                onChange={handleUrlChange}
+                onChange={({ target }) => setUrl(target.value)}
               />
             </div>
             <button type="submit">Create</button>

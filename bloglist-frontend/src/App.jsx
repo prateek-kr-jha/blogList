@@ -6,6 +6,9 @@ import LoginForm from './components/Login'
 import Togglable from './components/Togglable'
 import CreateBlog from './components/CreateBlog'
 
+//  create view button to all the blogs
+// functionality to increase likes
+
 const Notification = ({ message, className }) => {
   if(message === null) {
     return null;
@@ -22,16 +25,11 @@ const Notification = ({ message, className }) => {
 
 
 const App = () => {
-  const [loginVisible, setLoginVisible] = useState(false)
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
   const [message, setMessage] = useState(null)
   const [messageClass, setMessageClass] = useState(null)
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
+
 
   useEffect(() => {
     const loggedBlogAppUser = window.localStorage.getItem('loggedBlogAppUser');
@@ -45,12 +43,10 @@ const App = () => {
     }
   }, [])
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
+  const handleLogin = async (userDetails) => {
+    
     try {
-      const user = await loginService.login({
-        username, password
-      })
+      const user = await loginService.login(userDetails)
       if(user) {
         window.localStorage.setItem(
           'loggedBlogAppUser', JSON.stringify(user)
@@ -61,8 +57,7 @@ const App = () => {
         const blog_response = await blogService.getAll();
         setBlogs(blog_response)
       }
-      setPassword('');
-      setUsername('');
+
     } catch(e) {
       console.log(e);
       setMessageClass("error")
@@ -80,31 +75,19 @@ const App = () => {
     setUser(null);
   }
   const loginForm = () => {
-    // const hideWhenVisible = { display: loginVisible ? 'none': '' }
-    // const showWhenVisible = { display: loginVisible ? '' : 'none' }
 
     return (
       <Togglable buttonLabel='login'>
          <LoginForm 
-            username={username}
-            password={password}
-            handlePasswordChange={({ target }) => setPassword(target.value)}
-            handleUsernameChange={({ target }) => setUsername(target.value)}
-            handleSubmit={handleLogin}
+            handleLogin={handleLogin}
           />
       </Togglable>
     )
   }
 
-  const handleBlogSubmit = async (e) => {
-    e.preventDefault();
+  const addBlog = async (blogObj) => {
     try {
-      const blog = await blogService.create({
-        title,
-        author,
-        url
-      })
-      console.log(blog, "----------------------------------");
+      const blog = await blogService.create(blogObj)
       setBlogs(blogs.concat(blog))
       setMessageClass("notification")
       setMessage(`a new blog ${blog.title} by ${blog.author} added`);
@@ -112,10 +95,6 @@ const App = () => {
         setMessageClass(null)
         setMessage(null)
       }, 5000)
-      setTitle('')
-      setAuthor('')
-      setUrl('')
-
     } catch(e) {
       console.log(e);
       setMessageClass("error")
@@ -131,10 +110,7 @@ const App = () => {
     return (
       <Togglable buttonLabel='New Blog'>
         <CreateBlog
-          handleBlogSubmit={handleBlogSubmit}
-          handleTitleChange={({ target }) => setTitle(target.value)}
-          handleAuthorChange={({ target }) => setAuthor(target.value)}
-          handleUrlChange={({ target }) => setUrl(target.value)}
+          addBlog={addBlog}
         />
       </Togglable>
     )

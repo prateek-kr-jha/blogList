@@ -1,4 +1,7 @@
 const CreateBlog = ({
+    title, 
+    author,
+    url,
     handleBlogSubmit,
     handleTitleChange,
     handleAuthorChange,
@@ -37,3 +40,5 @@ const CreateBlog = ({
         </div>
     )
 }
+
+export default CreateBlog

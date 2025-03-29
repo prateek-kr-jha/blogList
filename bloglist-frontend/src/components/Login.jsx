@@ -5,7 +5,6 @@ const LoginForm = ({
     handlePasswordChange,
     handleSubmit
 }) => {
-    console.log('handle----------------------');
     return (
         <div>
             <form onSubmit={handleSubmit}>

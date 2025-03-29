@@ -3,6 +3,8 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import LoginForm from './components/Login'
+import Togglable from './components/Togglable'
+import CreateBlog from './components/CreateBlog'
 
 const Notification = ({ message, className }) => {
   if(message === null) {
@@ -78,25 +80,19 @@ const App = () => {
     setUser(null);
   }
   const loginForm = () => {
-    const hideWhenVisible = { display: loginVisible ? 'none': '' }
-    const showWhenVisible = { display: loginVisible ? '' : 'none' }
+    // const hideWhenVisible = { display: loginVisible ? 'none': '' }
+    // const showWhenVisible = { display: loginVisible ? '' : 'none' }
 
     return (
-      <div>
-        <div style={hideWhenVisible}>
-          <button onClick={() => setLoginVisible(true)}>Log in</button>
-        </div>
-        <div style={showWhenVisible}>
-          <LoginForm 
+      <Togglable buttonLabel='login'>
+         <LoginForm 
             username={username}
             password={password}
             handlePasswordChange={({ target }) => setPassword(target.value)}
             handleUsernameChange={({ target }) => setUsername(target.value)}
             handleSubmit={handleLogin}
           />
-          <button onClick={() => setLoginVisible(false)}>Cancel</button>
-        </div>
-      </div>
+      </Togglable>
     )
   }
 
@@ -133,36 +129,14 @@ const App = () => {
 
   const BlogForm = () => {
     return (
-      <div>
-        <h2>Create New</h2>
-        <form onSubmit={handleBlogSubmit}>
-          <div>
-            title:
-            <input 
-              type="text"
-              value={title}
-              onChange={({ target }) => setTitle(target.value)}
-            />
-          </div>
-          <div>
-            author:
-            <input 
-              type="text"
-              value={author}
-              onChange={({ target }) => setAuthor(target.value)}
-            />
-          </div>
-          <div>
-            url:
-            <input 
-              type="url"
-              value={url}
-              onChange={({ target }) => setUrl(target.value)}
-            />
-          </div>
-          <button type="submit">Create</button>
-        </form>
-      </div>
+      <Togglable buttonLabel='New Blog'>
+        <CreateBlog
+          handleBlogSubmit={handleBlogSubmit}
+          handleTitleChange={({ target }) => setTitle(target.value)}
+          handleAuthorChange={({ target }) => setAuthor(target.value)}
+          handleUrlChange={({ target }) => setUrl(target.value)}
+        />
+      </Togglable>
     )
   }
 

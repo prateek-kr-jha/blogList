@@ -72,9 +72,6 @@ blogRouter.put('/:id', async (req, res) => {
   // console.log('user', user);
   const id = req.params.id;
   const blog = await Blog.findById(id);
-
-  
-  console.log('re', req.body)
   const found = user.likedBlogs.find(blogId => {
     return blogId.toString() === id
   });
@@ -84,19 +81,23 @@ blogRouter.put('/:id', async (req, res) => {
     ...req.body
   }
 
-  console.log(updatedBlog, "----------------------------------------");
 
-  const returnedBlog = await Blog.findByIdAndUpdate(id, updatedBlog, {new: true});
 
   if(!found) {
-    user.likedBlogs = user.likedBlogs.concat(returnedBlog.id);
+    user.likedBlogs = user.likedBlogs.concat(req.body.id);
+    updatedBlog.likes = updatedBlog.likes + 1;
     await user.save();
   } else {
+    updatedBlog.likes = updatedBlog.likes - 1;
+
     await User.findByIdAndUpdate(user._id, {
       $pull: { likedBlogs: id }
     });
 
   }
+
+  const returnedBlog = await Blog.findByIdAndUpdate(id, updatedBlog, {new: true});
+
   return res.json(returnedBlog);
 
 

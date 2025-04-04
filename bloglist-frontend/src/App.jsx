@@ -6,8 +6,10 @@ import LoginForm from './components/Login'
 import Togglable from './components/Togglable'
 import CreateBlog from './components/CreateBlog'
 
-//  create view button to all the blogs
+
 // functionality to increase likes
+// sort on number of likes
+// functionality to delete post
 
 const Notification = ({ message, className }) => {
   if(message === null) {

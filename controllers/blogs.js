@@ -4,7 +4,6 @@ const User = require('../model/user');
 const jwt = require('jsonwebtoken');
 const config = require('./../utils/config');
 
-
 // const getTokenFrom = request => {
 //   const authorization = request.get('authorization');
 //   if(authorization && authorization.startsWith('Bearer ')) {
@@ -69,16 +68,45 @@ blogRouter.delete('/:id', async (req, res, next) => {
 })
 
 blogRouter.put('/:id', async (req, res) => {
+  const user = req.user;
+  // console.log('user', user);
   const id = req.params.id;
-  const blog = await Blog.find({id});
+  const blog = await Blog.findById(id);
 
+  
+  console.log('re', req.body)
+  const found = user.likedBlogs.find(blogId => {
+    return blogId.toString() === id
+  });
+
+  // console.log(found, "----------------------------------------");
   const updatedBlog = {
-    ...blog,
     ...req.body
   }
 
+  console.log(updatedBlog, "----------------------------------------");
+
   const returnedBlog = await Blog.findByIdAndUpdate(id, updatedBlog, {new: true});
-  res.json(returnedBlog);
+
+  if(!found) {
+    user.likedBlogs = user.likedBlogs.concat(returnedBlog.id);
+    await user.save();
+  } else {
+    await User.findByIdAndUpdate(user._id, {
+      $pull: { likedBlogs: id }
+    });
+
+  }
+  return res.json(returnedBlog);
+
+
+  // console.log(req.body, id, "----------------------------------------", req.user);
+
+  // const updatedBlog = {
+  //   ...blog,
+  //   ...req.body
+  // }
+
 })
 
 

@@ -27,8 +27,18 @@ const create = async (blogData) => {
   return response.data
 }
 
+const modify = async (blogData) => {
+  const config = {
+    headers: { Authorization: token }
+  }
+  const response = await axios.put(baseUrl, blogData, config);
+  console.log(response, "----------------------------")
+  return response.data
+}
+
 export default { 
   getAll,
   setToken,
-  create
+  create,
+
 }

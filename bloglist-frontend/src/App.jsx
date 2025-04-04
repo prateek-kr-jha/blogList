@@ -76,6 +76,17 @@ const App = () => {
     window.localStorage.removeItem('loggedBlogAppUser');
     setUser(null);
   }
+
+  const handleLikeButton = async (id) => {
+    const blog = blogs.find(b => b.id === id)
+    const returnedBlog = await blogService.modify(blog);
+    if(returnedBlog) {
+      const idx = blogs.findIndex(b => b.id === id);
+      const newBlogs = [...blogs];
+      newBlogs[idx] = returnedBlog;
+      setBlogs(newBlogs);
+    }
+  }
   const loginForm = () => {
 
     return (
@@ -137,7 +148,7 @@ const App = () => {
         <br/>
         
         {blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} />
+            <Blog key={blog.id} blog={blog} id={blog.id} handleLikeButton={handleLikeButton} />
         )} 
 
     </div>

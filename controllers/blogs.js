@@ -67,24 +67,21 @@ blogRouter.delete('/:id', async (req, res, next) => {
   }
 })
 
-blogRouter.put('/:id', async (req, res) => {
+blogRouter.put('/', async (req, res) => {
   const user = req.user;
-  // console.log('user', user);
-  const id = req.params.id;
-  const blog = await Blog.findById(id);
+  const id = req.body.id;
   const found = user.likedBlogs.find(blogId => {
     return blogId.toString() === id
   });
 
-  // console.log(found, "----------------------------------------");
   const updatedBlog = {
     ...req.body
   }
 
-
+  console.log(updatedBlog, "---------------------------------------")
 
   if(!found) {
-    user.likedBlogs = user.likedBlogs.concat(req.body.id);
+    user.likedBlogs = user.likedBlogs.concat(id);
     updatedBlog.likes = updatedBlog.likes + 1;
     await user.save();
   } else {
@@ -99,15 +96,6 @@ blogRouter.put('/:id', async (req, res) => {
   const returnedBlog = await Blog.findByIdAndUpdate(id, updatedBlog, {new: true});
 
   return res.json(returnedBlog);
-
-
-  // console.log(req.body, id, "----------------------------------------", req.user);
-
-  // const updatedBlog = {
-  //   ...blog,
-  //   ...req.body
-  // }
-
 })
 
 

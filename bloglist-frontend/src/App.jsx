@@ -87,6 +87,14 @@ const App = () => {
       setBlogs(newBlogs);
     }
   }
+
+  const handleDelete = async (id) => {
+    const blog = blogs.find(b => b.id === id)
+    if(window.confirm(`Are you sure you want to remove ${blog.title} by ${blog.author}`)) {
+      await blogService.deleteBlog(id);
+      setBlogs(blogs.filter(b => b.id !== id))
+    }
+  }
   const loginForm = () => {
 
     return (
@@ -148,7 +156,13 @@ const App = () => {
         <br/>
         
         {blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} id={blog.id} handleLikeButton={handleLikeButton} />
+            <Blog 
+              key={blog.id} 
+              blog={blog} 
+              id={blog.id} 
+              handleLikeButton={handleLikeButton} 
+              handleDelete={handleDelete} 
+            />
         )} 
 
     </div>

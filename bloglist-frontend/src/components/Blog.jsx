@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-const Blog = ({ blog, id, handleLikeButton }) => {
+const Blog = ({ blog, id, handleLikeButton, handleDelete }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -22,8 +22,8 @@ const Blog = ({ blog, id, handleLikeButton }) => {
     handleLikeButton(e.target.id);
   }
 
-  const deleteBlog = () => {
-    console.log('delete')
+  const deleteBlog = (e) => {
+    handleDelete(e.target.dataset.id);
   }
   return (
     <div style={blogStyle}>
@@ -37,12 +37,12 @@ const Blog = ({ blog, id, handleLikeButton }) => {
           {blog.url}
         </div>
         <div>
-          Likes {blog.likes} <button onClick={addLike} id={id}>Likes</button>
+          Likes {blog.likes} <button onClick={addLike} id={id}>Like</button>
         </div>
         <div>
           {blog.author}
         </div>
-        <button type="button">Delete</button>
+        <button type="button" onClick={deleteBlog} data-id={id}>Remove</button>
       </div>
     </div> 
   ) 

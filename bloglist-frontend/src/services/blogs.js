@@ -31,8 +31,16 @@ const modify = async (blogData) => {
   const config = {
     headers: { Authorization: token }
   }
-  const response = await axios.put(`${baseUrl}/${blogData.id}`, blogData, config);
+  const response = await axios.put(`${baseUrl}`, blogData, config);
   console.log(response, "----------------------------")
+  return response.data
+}
+
+const deleteBlog = async (id) => {
+  const config = {
+    headers: { Authorization: token }
+  }
+  const response = await axios.delete(`${baseUrl}/${id}`, config);
   return response.data
 }
 
@@ -40,5 +48,6 @@ export default {
   getAll,
   setToken,
   create,
-  modify
+  modify,
+  deleteBlog
 }
